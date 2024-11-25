@@ -185,6 +185,25 @@ select*from student where marks between 80 and 90;
 select*from student where city In ("delhi","Mumbai");
 select*from student where city not in("delhi","mumbai");
 
+ /*
+The LIKE operator in SQL is used to search for patterns in data.
+-- Wildcards:
+1: % Matches zero or more characters.
+Example: 'a%' → Matches "apple", "arm".
+2: _ Matches one character.
+Example: 'a_' → Matches "at", "an".
+
+*/
+
+-- % example:
+
+select * from student where name like 'A%';
+-- _ example:
+select * from student where name like '_a%';
+
+select*from student where name like '%h%';
+
+
 -- limit clause: sets an upper limit on number of (tuples) rows to be returned
 -- syntax: select col1,col2 from table_name limit number;
 
