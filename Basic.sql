@@ -76,6 +76,38 @@ There is only 1 PK & it should be NOT null.
 FKs can have duplicate & null values.
 There can be multiple FK.
 */
+/*  Example of foreign key */
+
+
+create table customer(
+customerID int primary key,
+Name varchar(100),
+email varchar(100)
+);
+
+-- Create Orders table with a foreign key referencing Customers
+
+create table orders(
+orderID int primary key,
+orderDate Date,
+CustomerID int ,
+Foreign key (CustomerID) references customer(CustomerID)
+);
+drop tables Orders;
+drop tables  Customer;
+
+
+INSERT INTO Customer (CustomerID, Name, Email) 
+VALUES 
+(1, 'John Doe', 'john@example.com'),
+(2,'kaka','kaka@gmail.com');
+
+INSERT INTO Orders (OrderID, OrderDate, CustomerID) 
+VALUES (101, '2025-02-13', 1),
+(102, '2025-02-13', 2);
+
+select*from orders;
+select*from customer;
 
 /*
 constraints:
