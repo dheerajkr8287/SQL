@@ -146,6 +146,18 @@ age int ,
 constraint age_check check (age>=18 and city="delhi")
 );
 
+-- this is not inserted because it not follow constraint(rules) 
+-- insert into city
+-- (id,city,age)
+-- values
+-- (1,"UP",25),
+-- (2,"UK",30),
+-- (3,"casey",40);
+
+insert into city values (4,"delhi",19);
+
+select*from city;
+
 -- ##################################### --
 create database college;
 use college;
