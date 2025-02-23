@@ -229,23 +229,67 @@ select*from student where marks between 80 and 90;
 select*from student where city In ("delhi","Mumbai");
 select*from student where city not in("delhi","mumbai");
 
+/*
+ALL in SQL:
+ALL is used with comparison operators (=, >, <, >=, <=, !=) to compare a value with all values in a subquery.
+It returns TRUE only if the condition is true for all records in the subquery.
+
+create table employee(
+id int primary key,
+name varchar(50),
+salary double 
+);
+
+insert into employee
+(id,name,salary)
+values
+(1,"adam",25000),
+(2,"bob",30000),
+(3,"casey",40000);
+insert into employee values
+(4,"kaka",45000),
+(6,"kahi",4300),
+(7,"rgaka",43000),
+(5,"raj",932324);
+
+SELECT * FROM employee
+WHERE salary > ALL (SELECT salary FROM employee WHERE name = 'bob');
+*/
+
+/*
+ANY in SQL
+ANY is similar to ALL but checks if at least one value from a subquery meets the condition.
+Example: Get employees who earn more than at least one employee with salary below 4000
+SELECT * FROM employee 
+WHERE salary > ANY (SELECT salary FROM employee WHERE salary < 4000);
+Explanation:
+The subquery SELECT salary FROM employee WHERE salary < 4000 returns salaries below 4000.
+ANY means that the condition will be true if the salary is greater than at least one value from the subquery.
+
+*/
+
  /*
-The LIKE operator in SQL is used to search for patterns in data.
+The LIKE operator in SQL is used for pattern matching in text data.
 -- Wildcards:
 1: % Matches zero or more characters.
 Example: 'a%' → Matches "apple", "arm".
 2: _ Matches one character.
 Example: 'a_' → Matches "at", "an".
 
+1:Find employees whose name starts with 'k'
+SELECT * FROM employee WHERE name LIKE 'k%';
+Explanation:
+k% matches any name that starts with 'k' (e.g., "kaka", "kahi").
+
+2:Find employees whose name contains 'aka'
+SELECT * FROM employee WHERE name LIKE '%aka%';
+Matches: "kaka", "rgaka"
+
+3:Find employees whose name has 'a' as the second letter
+SELECT * FROM employee WHERE name LIKE '_a%';
+
 */
 
--- % example:
-
-select * from student where name like 'A%';
--- _ example:
-select * from student where name like '_a%';
-
-select*from student where name like '%h%';
 
 
 -- limit clause: sets an upper limit on number of (tuples) rows to be returned
