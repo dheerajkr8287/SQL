@@ -221,6 +221,32 @@ ex:select*from student where city("delhi","mumbai");
 
 =>not(to negate the given condtion )
 ex:select*from student where city not in("delhi","mumbai");
+
+=>NULL (No value
+Missing data
+Unknown value)
+Important:
+NULL is NOT equal to 0, empty string, or false
+Example 1: Find NULL values
+SELECT * 
+FROM employees
+WHERE manager_id IS NULL;
+👉 Returns employees who do not have a manager assigned
+
+
+=>IS NOT NULL:
+👉 Used to find values that are present (not NULL)
+SELECT * 
+FROM employees
+WHERE salary IS NOT NULL;
+
+🔥 Important Rule (Very Important for Interview)
+❌ Wrong:
+WHERE column_name = NULL
+❌ Wrong:
+WHERE column_name != NULL
+👉 These will NOT work because:
+NULL cannot be compared using = or !=
  
 */
 select*from student where marks >80 and city="mumbai";
