@@ -315,15 +315,252 @@ Matches: "kaka", "rgaka"
 SELECT * FROM employee WHERE name LIKE '_a%';
 
 */
+          --    LIMIT AND OFFSET ------
 
 
-
--- limit clause: sets an upper limit on number of (tuples) rows to be returned
+-- limit clause: LIMIT is used to control how many rows you want to fetch from a table.
 -- syntax: select col1,col2 from table_name limit number;
 
 select*from student where marks>60
 limit 3;
 
+-- OFFSET : is used to skip some rows before starting to return results.
+-- syntax:
+SELECT column_name
+FROM table_name
+LIMIT number OFFSET number;
+
+-- limit and offset SYNTAX:
+--  select *form table Limit(row count) offset(offset);
+--  select * form table Limit [offset],[row count]; 
+Real-Life Understanding 📊
+
+Imagine a table: EMPLOYEE
+
+ID	Name
+1	A
+2	B
+3	C
+4	D
+5	E
+6	F
+7	G
+8	H
+9	I
+10	J
+11	K
+12	L
+Query:
+SELECT * FROM employees
+LIMIT 3 OFFSET 5;
+
+👉 Step-by-step:
+
+Skip first 5 rows → (A, B, C, D, E)
+Then take next 3 → (F, G, H)
+ 
+🔹 Shortcut Syntax (MySQL)
+SELECT * FROM employees
+LIMIT 5, 3;
+
+👉 Meaning:
+
+Skip 5 rows
+Return 3 rows
+
+ -- Pagination (Very Important for Interviews 🚀)
+Formula for Pagination:
+OFFSET = (page_number - 1) * page_size
+Example:
+Page = 3
+Page size = 5 (limit)
+
+👉 OFFSET = (3 - 1) * 5 = 10
+ Used in websites (like page 1, page 2, etc.)
+
+Page-wise Example:
+
+👉 Page 1:
+
+SELECT * FROM employees
+LIMIT 5 OFFSET 0;
+
+👉 Page 2:
+
+SELECT * FROM employees
+LIMIT 5 OFFSET 5;
+
+👉 Page 3:
+
+SELECT * FROM employees
+LIMIT 5 OFFSET 10;
+Important Points ⚠️
+
+✔ Always use ORDER BY with LIMIT (to get consistent results)
+
+SELECT * FROM employees
+ORDER BY id
+LIMIT 5;
+
+✔ Without ORDER BY, result order is not guaranteed
+
+ --  without single pagination is difficult :
+ 
+ Why only LIMIT is NOT enough
+SELECT * FROM employees LIMIT 5;
+
+👉 This always gives:
+➡️ First 5 rows only (Page 1)
+
+❌ Problem:
+
+How will you get Page 2?
+It will again return the same 5 rows
+
+So LIMIT alone cannot move to next pages
+
+🔹 Why only OFFSET is NOT enough
+SELECT * FROM employees OFFSET 5;
+
+❌ This is invalid in most databases (like MySQL)
+
+👉 Even if supported (like PostgreSQL), it means:
+➡️ Skip 5 rows
+➡️ But… how many rows to return? ❓
+
+So result is undefined or not useful.
+
+🔹 Why BOTH are needed (Real Pagination)
+SELECT * FROM employees
+LIMIT 5 OFFSET 5;
+
+👉 Now it makes sense:
+
+OFFSET 5 → skip first 5 rows
+LIMIT 5 → take next 5 rows
+
+✔ This gives Page 2
+
+ Real Page Movement Example
+Page   	Query     	What happens:
+Page 1	 LIMIT 5     OFFSET 0	First 5 rows
+Page 2	 LIMIT 5     OFFSET 5	Next 5 rows
+Page 3	 LIMIT 5     OFFSET 10	Next 5 rows
+
+ -- Why do we use both LIMIT and OFFSET?
+ -- LIMIT defines how many records to fetch, while OFFSET defines from where to start. Pagination requires 
+ -- both to correctly fetch a specific page of data.
+
+ -- Why OFFSET becomes slow (core idea)
+
+When you run:
+
+SELECT * FROM employees
+ORDER BY id
+LIMIT 10 OFFSET 100000;
+
+👉 You are asking:
+
+Skip 100,000 rows
+Then return next 10
+❗ What the database REALLY does
+
+It does NOT jump directly to row 100001 ❌
+
+Instead, it:
+
+Reads row 1
+Reads row 2
+Reads row 3
+…
+Reads row 100000
+Discards all of them 😐
+Finally returns next 10 rows
+
+👉 So work done = 100,010 rows processed
+
+Even though you only need 10 rows
+
+🔹 Visualization
+Small OFFSET (fast)
+LIMIT 10 OFFSET 10
+
+👉 Reads ~20 rows → fast ✅
+
+Large OFFSET (slow)
+LIMIT 10 OFFSET 100000
+
+👉 Reads ~100,010 rows → slow ❌
+
+🔹 Time Complexity Thinking 🧠
+OFFSET pagination → O(n) (linear scan)
+Larger OFFSET = more time
+🔹 Real Production Problem 🚨
+
+Imagine:
+
+10 million records
+User opens page 1000
+LIMIT 10 OFFSET 9990
+
+👉 Database scans thousands/millions of rows every time
+
+👉 Results:
+
+Slow API response
+High CPU usage
+Bad user experience
+🔹 Index doesn’t fully save you ❗
+
+Even if you use:
+
+ORDER BY id
+
+with an index
+
+👉 Database still needs to walk through index entries to count OFFSET rows
+
+So:
+✔ Index helps sorting
+❌ But doesn’t eliminate OFFSET cost
+
+🔥 Real Solution: Keyset Pagination (Cursor-Based)
+
+Instead of OFFSET:
+
+SELECT * FROM employees
+WHERE id > 100000
+ORDER BY id
+LIMIT 10;
+
+✅ Why this is fast
+Directly jumps using index
+No skipping needed
+Only reads required rows
+
+👉 Work done = only 10 rows 🚀
+
+🔹 Comparison
+Feature   	OFFSET Pagination	            Keyset Pagination
+Performance	 Slow for large data         	Fast
+Complexity	  Simple	                      Slightly advanced
+Use case     	Small datasets              	Large-scale apps
+ 
+🔥 Real-world companies
+Big companies like:
+Amazon
+Flipkart
+LinkedIn
+
+👉 Avoid OFFSET for deep pages
+👉 Use cursor-based pagination
+
+🔥 Interview Answer (Perfect)
+
+OFFSET is slow because the database must scan and discard all preceding rows before returning results. 
+ As OFFSET increases, the number of rows scanned increases linearly, leading to poor performance.
+ Keyset pagination solves this by directly fetching rows using indexed columns.
+ 
 -- order by clause : to sort in ascending(ASC) or decending order(DESC)
 -- syntax:select col1,col2 from table_name orderby col_names ASC;
 
