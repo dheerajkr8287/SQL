@@ -348,7 +348,7 @@ select sum(marks) from student;
 
 /*
 Group by clause:
-roups rows that have the same values into summary rows.
+Groups rows that have the same values into summary rows.
 It collects data from multiple records and groups the result by one or more column.
 
 *Generally we use group by with some aggregation function.
@@ -398,8 +398,8 @@ HAVING condition
 ORDER BY column(s) ASC;
 
 
-where-> applies rows
-having -> applies groups
+where-> applies conditiion on rows before grouping
+having -> applies condition on groups  after grouping  
 */
 select city 
 from student 
@@ -410,7 +410,7 @@ order by city desc;
 
 /*
 update:
-to update existing rows
+to update existing rows 
 
 synatx:
 update table_name
