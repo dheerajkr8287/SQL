@@ -217,7 +217,7 @@ ex: select*from student where marks >80 orcity="mumbai";
 ex:select*from student where marks between 80 and 90;
 
 =>In (matches any value in the list)
-ex:select*from student where city("delhi","mumbai");
+ex:select*from student where city IN ("delhi","mumbai");
 
 =>not(to negate the given condtion )
 ex:select*from student where city not in("delhi","mumbai");
