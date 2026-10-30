@@ -138,6 +138,21 @@ salary int default 25000);
 insert into  emp(id) values (101);
 select*from emp;
 
+-- DISTINCT :keyword is used inside a SELECT statement to eliminate duplicate rows from the result set and return only unique values.
+Syntax:
+SELECT DISTINCT column_name FROM table_name;
+SELECT DISTINCT city FROM student;
+
+--LENGTH() function is a built-in string function that returns the length of a string (the number of bytes or characters, depending on the database system).
+Syntax:
+SELECT LENGTH(string_or_column);
+
+SELECT name, LENGTH(name) AS name_length FROM student;
+-- Filtering with LENGTH() in a WHERE Clause
+Find students whose names have more than 5 characters:
+SELECT name FROM student WHERE LENGTH(name) > 5;
+
+
 -- check :it can limit the value allowed in a coloumn 
 create table city(
 id int primary key,
