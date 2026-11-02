@@ -307,6 +307,41 @@ Explanation:
 The subquery SELECT salary FROM employee WHERE salary < 4000 returns salaries below 4000.
 ANY means that the condition will be true if the salary is greater than at least one value from the subquery.
 
+-- another exmaple of ANY
+-- Create marks table
+CREATE TABLE marks (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    score INT
+);
+
+-- Insert sample data
+INSERT INTO marks (id, name, score) VALUES 
+(1, 'Anil', 40),
+(2, 'Bob', 60),
+(3, 'Casey', 75),
+(4, 'David', 90);
+
+The QueryFind students who scored higher than at least one failing student (assuming passing score is 50):SQL
+SELECT name, score 
+FROM marks 
+WHERE score > ANY (
+    SELECT score 
+    FROM marks 
+    WHERE score < 50
+);
+ How It Works Step-by-StepSubquery runs first:
+SELECT score FROM marks WHERE score < 50;
+This returns only: (40).Main query evaluates score > ANY (40):
+It checks if a student's score is greater than 40:
+Bob (60 > 40) true
+Casey (75 > 40)  TRUE
+david (90>40) true
+anil(40>40) false
+
+
+
+
 */
 
  /*
